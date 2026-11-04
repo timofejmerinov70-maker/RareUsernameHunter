@@ -1,1 +1,61 @@
+const TelegramBot = require('node-telegram-bot-api');
 
+const TOKEN = process.env.BOT_TOKEN;
+
+if (!TOKEN) {
+  throw new Error('Не найден BOT_TOKEN');
+}
+
+const bot = new TelegramBot(TOKEN, { polling: true });
+
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(msg.chat.id, '💎 Добро пожаловать в Rare Username Hunter!', {
+    reply_markup: {
+      keyboard: [
+        ['🔎 Генератор юзов'],
+        ['💎 Короткие юзы'],
+        ['⭐ Красивые юзы'],
+        ['📊 Оценить юз']
+      ],
+      resize_keyboard: true
+    }
+  });
+});
+
+function generateNames() {
+  const words = [
+    'nova', 'luna', 'zero', 'ghost',
+    'pixel', 'royal', 'alpha', 'dream',
+    'vibe', 'neo', 'storm', 'prime'
+  ];
+
+  return words.sort(() => Math.random() - 0.5).slice(0, 6);
+}
+
+bot.on('message', (msg) => {
+  const chatId = msg.chat.id;
+  const text = msg.text;
+
+  if (!text || text.startsWith('/')) return;
+
+  if (text === '🔎 Генератор юзов') {
+    bot.sendMessage(chatId,
+      '💎 Варианты username:\n\n' +
+      generateNames().map(x => '@' + x).join('\n')
+    );
+  }
+
+  if (text === '💎 Короткие юзы') {
+    bot.sendMessage(chatId, '🔍 Подбирай короткие имена через генератор. Это не проверка доступности.');
+  }
+
+  if (text === '⭐ Красивые юзы') {
+    bot.sendMessage(chatId, '⭐ Красивые слова: @nova, @luna, @royal, @dream, @prime');
+  }
+
+  if (text === '📊 Оценить юз') {
+    bot.sendMessage(chatId, 'Отправь username следующим сообщением, чтобы получить оценку.');
+  }
+});
+
+console.log('Rare Username Hunter запущен!');
