@@ -1,1 +1,12 @@
-
+{
+  "name": "rare-username-hunter",
+  "version": "1.0.0",
+  "description": "Telegram username hunter",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
